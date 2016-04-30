@@ -1,0 +1,36 @@
+<!DOCTYPE HTML> 
+<html>
+<head>
+<title>Fullscreen Image Zoom and Pan with Jquery</title>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<link href="jquery.pan.css" rel="stylesheet" type="text/css"/>
+
+</head>
+<body>
+
+<h1>Fullscreen Image Zoom and Pan with Jquery</h1>
+
+<p>click on images below</p>
+
+<hr />
+
+<a class="pan" data-big="img/big1.jpg" href=""><img src="img/small1.jpg" alt="" /></a>
+<a class="pan" data-big="img/big2.jpg" href=""><img src="img/small2.jpg" alt="" /></a>
+<a class="pan" data-big="img/big3.jpg" href=""><img src="img/small3.jpg" alt="" /></a>
+<a class="pan" data-big="img/big4.jpg" href=""><img src="img/small4.jpg" alt="" /></a>
+<a class="pan" data-big="img/big5.jpg" href=""><img src="img/small5.jpg" alt="" /></a>
+<a class="pan" data-big="img/big6.jpg" href=""><img src="img/small6.jpg" alt="" /></a>
+
+<p>All images from <a href="http://www.freeimages.com/" target="_blank">freeimages.com</a></p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="jquery.pan.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$(".pan").pan();
+	})
+</script>
+
+</body>
