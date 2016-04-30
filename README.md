@@ -6,7 +6,7 @@ Fullscreen Image Zoom and Pan with Jquery
 
 ## Getting Started
 
-Include jQuery and the plugin on a page. Include your images and initialise the plugin.
+Include jQuery and the plugin on a page and initialise the plugin. See demo on <a href="http://www.samilhazir.com/pan" target="_blank">www.samilhazir.com/pan</a>
 
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -19,7 +19,7 @@ Include jQuery and the plugin on a page. Include your images and initialise the 
 	})
 </script>
 ```
-Ust data-big attribute to point big images
+Use data-big attribute to point big images
 
 ```html
 <a class="pan" data-big="img/big1.jpg" href=""><img src="img/small1.jpg" alt="" /></a>
