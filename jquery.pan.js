@@ -26,6 +26,9 @@ jQuery.fn.extend({
 		$(this).click(function (e) {
 			var t = $(this);
 			var big = t.attr("data-big");
+			//If there's no data-big attribute, use the src of the image (sometimes they are simply limited in size with CSS and you just need a zoom of that)
+			if (big == undefined) 
+				big = t.attr("src");
 			$(".panWrapper").show();
 			$(".panWrapper img.i").css("width", "auto").attr("src", big).load(function () { panInit(e); });
 			return false;
