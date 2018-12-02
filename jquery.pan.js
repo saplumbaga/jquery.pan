@@ -1,3 +1,13 @@
+/*@license 
+Fullscreen Image Zoom and Pan with Jquery
+version @VERSION@
+
+by Samil Hazir (https://github.com/saplumbaga)
+Contributions by JM Alarcon (https://github.com/jmalarcon/)
+
+https://github.com/saplumbaga/jquery.pan
+ */
+
 jQuery.fn.extend({
 
 	pan: function () {
@@ -30,7 +40,7 @@ jQuery.fn.extend({
 			if (big == undefined) 
 				big = t.attr("src");
 			$(".panWrapper").show();
-			$(".panWrapper img.i").css("width", "auto").attr("src", big).load(function () { panInit(e); });
+			$(".panWrapper img.i").css("width", "auto").attr("src", big).on('load', function () { panInit(e); });
 			return false;
 		});
 
