@@ -64,7 +64,7 @@ jQuery.fn.extend({
 			$(close).click();
 		});
 
-		$(panWrapper).mousemove(function (e) {
+		$(panWrapper).on('mousemove touchmove', function (e) {
 			panInit(e);
 		});
 
@@ -86,7 +86,7 @@ jQuery.fn.extend({
 		});
 
 		function panInit(event) {
-
+			event.preventDefault();
 			var panImg = $(".panWrapper img.i");
 			var panWrapper = $(".panWrapper");
 
@@ -99,8 +99,8 @@ jQuery.fn.extend({
 			var mt = 0 - (h - $(panWrapper).height());
 
 			var scrollOffset = window.pageYOffset || document.documentElement.scrollTop;
-			var nl = parseInt((ml * parseInt(event.pageX)) / parseInt($(panWrapper).width()));
-			var nt = parseInt((mt * parseInt(event.pageY - scrollOffset)) / parseInt($(panWrapper).height()));
+			var nl = parseInt((ml * parseInt(event.pageX || event.touches[0].pageX)) / parseInt($(panWrapper).width()));
+			var nt = parseInt((mt * parseInt((event.pageY || event.touches[0].pageY) - scrollOffset)) / parseInt($(panWrapper).height()));
 
 			if (parseInt($(panWrapper).width()) > w && parseInt($(panWrapper).height()) > h) {
 				panImg.css("left", ((parseInt($(panWrapper).width()) - w) / 2));
