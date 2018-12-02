@@ -61,3 +61,7 @@
     background-size: 100%;
     display: block;
 }
+
+.panWrapper img {
+    max-width: unset !important;
+}

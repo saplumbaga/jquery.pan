@@ -137,7 +137,7 @@ jQuery.fn.extend({
 				panImg.css("top", nt);
 			}
 		}
-
+		return finalSet;
 	}
 });
 
