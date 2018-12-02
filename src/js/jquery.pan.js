@@ -33,6 +33,8 @@ jQuery.fn.extend({
 		$(panWrapper).append(panImg);
 		$("body").append(panWrapper);
 
+		$(this).css('cursor', 'zoom-in');
+
 		$(this).click(function (e) {
 			var t = $(this);
 			var big = t.attr("data-big");
