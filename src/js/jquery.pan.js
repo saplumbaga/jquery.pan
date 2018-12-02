@@ -33,9 +33,25 @@ jQuery.fn.extend({
 		$(panWrapper).append(panImg);
 		$("body").append(panWrapper);
 
-		$(this).css('cursor', 'zoom-in');
+		//Remove from set those image elements that are already shown in their natural size (they don't need zoom at all)
+		//If the element is not an image it's not filtered
+		var finalSet = $(this).filter(function() {
+			if (this.tagName == "IMG" ) {
+				var nW = this.naturalWidth || 0,
+					nH = this.naturalHeight || 0,
+					w = $(this).outerWidth(),
+                    h = $(this).outerHeight();
+				if (nW > w || nH > h)
+				return true;
+			}
+			else {
+				return true;
+			}
+		});
 
-		$(this).click(function (e) {
+		finalSet.css('cursor', 'zoom-in');
+
+		finalSet.click(function (e) {
 			var t = $(this);
 			var big = t.attr("data-big");
 			//If there's no data-big attribute, use the src of the image (sometimes they are simply limited in size with CSS and you just need a zoom of that)

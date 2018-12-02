@@ -1,6 +1,6 @@
 {
   "name": "jquery.pan",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Fullscreen Image Zoom and Pan with Jquery",
   "main": "jquery.pan.js",
   "scripts": {
@@ -21,6 +21,7 @@
     "pan"
   ],
   "author": "Samil Hazir",
+  "contributors": ["José M. Alarcón (https://github.com/jmalarcon/)"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/saplumbaga/jquery.pan/issues"
