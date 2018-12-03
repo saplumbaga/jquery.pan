@@ -117,8 +117,8 @@ jQuery.fn.extend({
 			var mt = 0 - (h - $(panWrapper).height());
 
 			var scrollOffset = window.pageYOffset || document.documentElement.scrollTop;
-			var nl = parseInt((ml * parseInt(event.pageX || event.touches[0].pageX)) / parseInt($(panWrapper).width()));
-			var nt = parseInt((mt * parseInt((event.pageY || event.touches[0].pageY) - scrollOffset)) / parseInt($(panWrapper).height()));
+			var nl = parseInt((ml * parseInt(event.pageX || (event.touches ? event.touches[0].pageX : 0)) / parseInt($(panWrapper).width())));
+			var nt = parseInt((mt * parseInt((event.pageY || (event.touches ? event.touches[0].pageY : 0) - scrollOffset)) / parseInt($(panWrapper).height())));
 
 			if (parseInt($(panWrapper).width()) > w && parseInt($(panWrapper).height()) > h) {
 				panImg.css("left", ((parseInt($(panWrapper).width()) - w) / 2));
