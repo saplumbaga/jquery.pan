@@ -2,10 +2,11 @@
 Fullscreen Image Zoom and Pan with Jquery
 version @VERSION@
 
-by Samil Hazir (https://github.com/saplumbaga)
-Contributions by JM Alarcon (https://github.com/jmalarcon/)
+Original version by Samil Hazir (https://github.com/saplumbaga)
+V.2.0 by JM Alarcon (https://github.com/jmalarcon/)
 
 https://github.com/saplumbaga/jquery.pan
+https://github.com/jmalarcon/jquery.pan
  */
 
 jQuery.fn.extend({
@@ -92,50 +93,91 @@ jQuery.fn.extend({
 			}
 		});
 
-		$(panWrapper).mousewheel(function (whellEvent) {
+		$(panWrapper).mousewheel(function (wheelEvent) {
 
-			if (whellEvent.deltaY > 0)
+			if (wheelEvent.deltaY > 0)
 				$(zo).click();
 			else
 				$(zi).click();
 
-			panInit(whellEvent);
+			panInit(wheelEvent);
 
 		});
+
+        //The next function encapsulates the whole logic of getting the pointer position in every case
+        function __getPointerPos(event, prop) {
+            var pos = event[prop];  //Normal mousemove event
+            if (pos == undefined) {
+                pos = 0;    //Default value if the next conditionals don't work
+                if (event.touches)  //jQuery for touch pointer move. Not available in jQuery 1.x
+                    pos = event.touches[0][prop];
+                else if (event.originalEvent) { //original window event
+                    if (event.originalEvent.touches)
+                        pos = event.originalEvent.touches[0][prop];
+                }
+            }
+            return pos;
+        }
+        function __getPointerPosX(event) {
+            return __getPointerPos(event, 'pageX');
+        }
+        function __getPointerPosY(event) {
+            return __getPointerPos(event, 'pageY');
+        }
 
 		function panInit(event) {
 			event.preventDefault();
 			var panImg = $(".panWrapper img.i");
 			var panWrapper = $(".panWrapper");
 
-			var w = parseInt(panImg.css("width"));
-			var h = parseInt(panImg.css("height"));
-			var x = parseInt(panImg.css("left"));
-			var y = parseInt(panImg.css("top"));
+			var w = parseInt(panImg.css("width"));  //Image width
+			var h = parseInt(panImg.css("height")); //Image height
+            var vpW = $(panWrapper).width();   //Viewport width
+            var vpH = $(panWrapper).height();   //Viewport height
 
-			var ml = 0 - (w - $(panWrapper).width());
-			var mt = 0 - (h - $(panWrapper).height());
+            /*Margin on the left (difference between the width of the container and the image width). 
+            If the image is wider than the container, it's negative (the image goes outside the viewport), 
+            if the image is less wide than the container, it's positive (it's the ammount of margin on the left to center the image) */
+			var ml = -(w - vpW);
+            //Idem with the height
+            var mt = -(h - vpH);  
+            //The amount of scroll from the top in the current page, to correct for pointer position
+            var scrollHOffset = window.pageXOffset || document.documentElement.scrollLeft,
+                scrollVOffset = window.pageYOffset || document.documentElement.scrollTop;
+            
+            //Left position of the pointer in page (first, try mouse, then try jQuery touch, default case native event touch for old jQuery versions), and in Viewport (substracting the scroll from left)
+            var posOfPointerInPageX     = __getPointerPosX(event),
+                posOfPointerInViewportX =  posOfPointerInPageX - scrollHOffset,
+                vpW = $(panWrapper).width();   //Viewport width
+            if (posOfPointerInViewportX < 0 ) posOfPointerInViewportX = 0; //In touch devices this can be slightly outside the viewport boundaries
+            if (posOfPointerInViewportX > vpW ) posOfPointerInViewportX = vpW;
 
-			var scrollOffset = window.pageYOffset || document.documentElement.scrollTop;
-			var nl = parseInt((ml * parseInt(event.pageX || (event.touches ? event.touches[0].pageX : 0)) / parseInt($(panWrapper).width())));
-			var nt = parseInt((mt * parseInt((event.pageY || (event.touches ? event.touches[0].pageY : 0) - scrollOffset)) / parseInt($(panWrapper).height())));
+            //Top position of the pointer in page (first, try mouse, then try jQuery touch, default case native event touch for old jQuery versions), and in Viewport (substracting the scroll from top)
+            var posOfPointerInPageY     = __getPointerPosY(event),
+                posOfPointerInViewportY =  posOfPointerInPageY - scrollVOffset,
+                vpH = $(panWrapper).height();   //Viewport height
+            if (posOfPointerInViewportY < 0 ) posOfPointerInViewportY = 0; //In touch devices this can be slightly outside the viewport boundaries
+            if (posOfPointerInViewportY > vpH ) posOfPointerInViewportY = vpH;
 
-			if (parseInt($(panWrapper).width()) > w && parseInt($(panWrapper).height()) > h) {
-				panImg.css("left", ((parseInt($(panWrapper).width()) - w) / 2));
-				panImg.css("top", ((parseInt($(panWrapper).height()) - h) / 2));
+            //New left: the new amount we need to move from the left to show other parts of the image depending on the current mouse position
+            var nl = Math.floor((ml * posOfPointerInViewportX) / vpW);
+            //New top: the new amount we need to move from the top to show other parts of the image depending on the current mouse position
+            var nt = Math.floor(mt * posOfPointerInViewportY / vpH);
+
+			if (vpW > w && vpH > h) {   //If the image is smaller than the available viewport, center it in both directions
+				nl = (vpW - w) / 2;
+				nt = (vpH - h) / 2;
 			}
-			else if (parseInt($(panWrapper).width()) > w) {
-				panImg.css("left", ((parseInt($(panWrapper).width()) - w) / 2));
-				panImg.css("top", nt);
+			else if (vpW > w) { //If the image width is less than the viewport, center it horizontally
+				nl = (vpW - w) / 2;
 			}
-			else if (parseInt($(panWrapper).height()) > h) {
-				panImg.css("left", nl);
-				panImg.css("top", ((parseInt($(panWrapper).height()) - h) / 2));
+			else if (vpH > h) { //If the image height is less than the viewport height, center it vertically
+				nt = (vpH - h) / 2;
 			}
-			else {
-				panImg.css("left", nl);
-				panImg.css("top", nt);
-			}
+            
+            //Position image in viewport as calculated
+            panImg.css("left", nl + 'px');
+			panImg.css("top", nt + 'px');
 		}
 		return finalSet;
 	}

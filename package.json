@@ -1,10 +1,10 @@
 {
   "name": "jquery.pan",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Fullscreen Image Zoom and Pan with Jquery",
   "main": "jquery.pan.js",
   "scripts": {
-    "compressjs": "uglifyjs ./src/js/jquery.pan.js -c --comments 'license' --source-map \"root='/', url='jquery.pan.min.js.map'\"  -o ./dist/jquery.pan.min.js",
+    "compressjs": "uglifyjs ./src/js/jquery.pan.js -c --comments --source-map \"root='/', url='jquery.pan.min.js.map'\"  -o ./dist/jquery.pan.min.js",
     "postcompressjs": "cross-var \"replace -s \"@VERSION@\" $npm_package_version ./dist/jquery.pan.min.js\"",
     "compresscss": "uglifycss ./src/css/jquery.pan.css --output ./dist/css/jquery.pan.css",
     "postcompresscss": "cpx ./src/css/img/* ./dist/css/img",
@@ -21,7 +21,9 @@
     "pan"
   ],
   "author": "Samil Hazir",
-  "contributors": ["José M. Alarcón (https://github.com/jmalarcon/)"],
+  "contributors": [
+    "José M. Alarcón (https://github.com/jmalarcon/)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/saplumbaga/jquery.pan/issues"
