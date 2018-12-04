@@ -1,0 +1,40 @@
+{
+  "name": "jquery.pan",
+  "version": "2.0.1",
+  "description": "Fullscreen Image Zoom and Pan with Jquery",
+  "main": "jquery.pan.js",
+  "scripts": {
+    "compressjs": "uglifyjs ./src/js/jquery.pan.js -c --comments --source-map \"root='/', url='jquery.pan.min.js.map'\"  -o ./dist/jquery.pan.min.js",
+    "postcompressjs": "cross-var \"replace -s \"@VERSION@\" $npm_package_version ./dist/jquery.pan.min.js\"",
+    "compresscss": "uglifycss ./src/css/jquery.pan.css --output ./dist/css/jquery.pan.css",
+    "postcompresscss": "cpx ./src/css/img/* ./dist/css/img",
+    "prebuild": "rimraf ./dist/**/*.*",
+    "build": "npm run compressjs && npm run compresscss"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saplumbaga/jquery.pan.git"
+  },
+  "keywords": [
+    "jquery",
+    "zoom",
+    "pan"
+  ],
+  "author": "Samil Hazir",
+  "contributors": [
+    "José M. Alarcón (https://github.com/jmalarcon/)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saplumbaga/jquery.pan/issues"
+  },
+  "homepage": "https://github.com/saplumbaga/jquery.pan#readme",
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "cross-var": "^1.1.0",
+    "replace": "^1.0.0",
+    "rimraf": "^2.6.2",
+    "uglify-js": "^3.4.9",
+    "uglifycss": "0.0.29"
+  }
+}
