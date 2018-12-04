@@ -1,12 +1,21 @@
-[Fullscreen Image Zoom and Pan with Jquery](http://www.samilhazir.com/pan)
+Fullscreen Image Zoom and Pan with Jquery
 ================================
+
+Original 1.x version written by [Samir Hazir](https://github.com/saplumbaga/jquery.pan). Version 2.x written by me.
 
 Fullscreen Image Zoom and Pan with Jquery
 
+Features:
+
+- Automatically add zoom and pan to any images or elements with images
+- Auto-apn alongside pointer movement
+- Zoom in and out support. You can increase or decrease the zoom level with specific buttons or with the mouse wheel
+- Support for mobile devices. You can pan dragging the zoomed image
+- Support from IE8+ and modern desktop and mobile browsers
 
 ## Getting Started
 
-Include jQuery and the plugin on a page and initialise the plugin. See demo on <a href="http://www.samilhazir.com/pan" target="_blank">www.samilhazir.com/pan</a>
+Include jQuery and the plugin on a page and initialize the plugin. See a working demo at [https://jmalarcon.github.io/jquery.pan/](https://jmalarcon.github.io/jquery.pan/) or check the `index.html` page of this repository.
 
 Works with all versions of jQuery, from 1.x to the latest ones.
 
@@ -20,6 +29,7 @@ Works with all versions of jQuery, from 1.x to the latest ones.
     })
 </script>
 ```
+
 If there's a `data-big` attribute in the element then that URL will be used for the zoomed image. If there's not, then it should be an `<img>` element and the `src` attribute will be used to zoom the image, since a lot of images are limited in size to fit in their container (for example with the `max-width` property). Check out the `index.html` sample file in the repo.
 
 ```html
