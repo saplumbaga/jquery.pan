@@ -1,6 +1,6 @@
 {
   "name": "jquery.pan",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Fullscreen Image Zoom and Pan with Jquery",
   "main": "jquery.pan.js",
   "scripts": {

@@ -37,13 +37,14 @@ jQuery.fn.extend({
 		//Remove from set those image elements that are already shown in their natural size (they don't need zoom at all)
 		//If the element is not an image it's not filtered
 		var finalSet = $(this).filter(function() {
-			if (this.tagName == "IMG" ) {
+            if ($(this).attr('data-big'))
+                return true;
+			if (this.tagName == "IMG") {
 				var nW = this.naturalWidth || 0,
 					nH = this.naturalHeight || 0,
 					w = $(this).outerWidth(),
                     h = $(this).outerHeight();
-				if (nW > w || nH > h)
-				return true;
+				return (nW > w || nH > h);
 			}
 			else {
 				return true;
