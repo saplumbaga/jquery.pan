@@ -17,9 +17,9 @@ Features:
 
 Include jQuery and the plugin on a page and initialize the plugin. See a working demo at [https://jmalarcon.github.io/jquery.pan/](https://jmalarcon.github.io/jquery.pan/) or check the `index.html` page of this repository. You can also use it as a dependency with npm by simply writing:
 
-´´´
+```
 npm i jquery.pan
-´´´
+```
 
 Works with all versions of jQuery, from 1.x to the latest ones.
 
