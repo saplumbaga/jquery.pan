@@ -8,14 +8,18 @@ Fullscreen Image Zoom and Pan with Jquery
 Features:
 
 - Automatically add zoom and pan to any images or elements with images
-- Auto-apn alongside pointer movement
+- Auto-pan alongside pointer movement
 - Zoom in and out support. You can increase or decrease the zoom level with specific buttons or with the mouse wheel
-- Support for mobile devices. You can pan dragging the zoomed image
+- Support for mobile devices. You can pan by dragging the zoomed image
 - Support from IE8+ and modern desktop and mobile browsers
 
 ## Getting Started
 
-Include jQuery and the plugin on a page and initialize the plugin. See a working demo at [https://jmalarcon.github.io/jquery.pan/](https://jmalarcon.github.io/jquery.pan/) or check the `index.html` page of this repository.
+Include jQuery and the plugin on a page and initialize the plugin. See a working demo at [https://jmalarcon.github.io/jquery.pan/](https://jmalarcon.github.io/jquery.pan/) or check the `index.html` page of this repository. You can also use it as a dependency with npm by simply writing:
+
+´´´
+npm i jquery.pan
+´´´
 
 Works with all versions of jQuery, from 1.x to the latest ones.
 
@@ -37,7 +41,9 @@ If there's a `data-big` attribute in the element then that URL will be used for 
 <img class="pan" style="max-width:150px;" src="img/big2.jpg" alt="" />
 ```
 
-It only adds the zoom capability to images that are **smaller than their natural size**. The `pan()` method filters out the jQuery selection and returns a jQuery selection with the final elements that have been processed to have zoom & pan capabilities. You can further process them as usual with jQuery, for example:
+It only adds the zoom capability to images that are **smaller than their natural size** or that have a `data-big` attribute. 
+
+The `pan()` method filters out the jQuery selection and returns a jQuery selection with the final elements that have been processed to have zoom & pan capabilities. You can further process them as usual with jQuery, for example:
 
 ```javascript
 $(function(){
@@ -49,5 +55,5 @@ $(function(){
 
 
 ## License
-Copyright (c) 2016 Samil Hazir
+Copyright (c) 2016 Samil Hazir, 2018 José M. Alarcon
 Dual licensed under the GPL and MIT licenses.
