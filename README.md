@@ -23,7 +23,10 @@ npm i jquery.pan
 
 Works with all versions of jQuery, from 1.x to the latest ones.
 
+You must include a small CSS, `jquery.pan.css` in the `dist/css` folder (400b bytes gzipped).
+
 ```html
+<link rel="stylesheet" href="css/jquery.pan.css" />
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="jquery.pan.js"></script>
 
@@ -34,20 +37,20 @@ Works with all versions of jQuery, from 1.x to the latest ones.
 </script>
 ```
 
-If there's a `data-big` attribute in the element then that URL will be used for the zoomed image. If there's not, then it should be an `<img>` element and the `src` attribute will be used to zoom the image, since a lot of images are limited in size to fit in their container (for example with the `max-width` property). Check out the `index.html` sample file in the repo.
+If there's a `data-big` attribute in the element, then that URL will be used for the zoomed image. If there's not, then it should be an `<img>` element and the `src` attribute will be used to zoom the image, since a lot of images are limited in size to fit in their container (for example with the `max-width` property). Check out the `index.html` sample file in the repo.
 
 ```html
-<a class="pan" data-big="img/big1.jpg" href=""><img src="img/small1.jpg" alt="" /></a>
-<img class="pan" style="max-width:150px;" src="img/big2.jpg" alt="" />
+<a class="pan" data-big="img/big1.jpg" href="#"><img src="img/small1.jpg" alt="" ></a>
+<img class="pan" style="max-width:150px;" src="img/big2.jpg" >
 ```
 
-It only adds the zoom capability to images that are **smaller than their natural size** or that have a `data-big` attribute. 
+>**IMPORTANT**: It only adds the zoom capability to images that are **smaller than their natural size** or that have a `data-big` attribute, since small images don't need it. This is by design.
 
 The `pan()` method filters out the jQuery selection and returns a jQuery selection with the final elements that have been processed to have zoom & pan capabilities. You can further process them as usual with jQuery, for example:
 
 ```javascript
 $(function(){
-    $(".pan").pan().each(function() {
+    $(".mainContent img").pan().each(function() {
         $(this).attr('title', 'CLICK TO ZOOM');
     });
 })
