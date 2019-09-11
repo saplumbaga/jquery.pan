@@ -29,6 +29,8 @@
     z-index: 2;
     bottom: 30px;
     cursor: pointer;
+    background-color: #dad6d6;
+    border-radius: 16px;
 }
 
 .panWrapper a.controls.in {
