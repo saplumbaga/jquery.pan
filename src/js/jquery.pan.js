@@ -1,9 +1,9 @@
-/*@license 
+/*@license
 Fullscreen Image Zoom and Pan with Jquery
 version @VERSION@
 
 Original version by Samil Hazir (https://github.com/saplumbaga)
-V.2.0 by JM Alarcon (https://github.com/jmalarcon/)
+V.2.1 by JM Alarcon (https://github.com/jmalarcon/)
 
 https://github.com/saplumbaga/jquery.pan
 https://github.com/jmalarcon/jquery.pan
@@ -18,6 +18,10 @@ jQuery.fn.extend({
 
 		var panImg = document.createElement('img');
 		$(panImg).addClass("i").css("position", "absolute");
+
+        var loadingImg = document.createElement('div');
+		$(loadingImg).attr('id', 'loading').addClass("loading");
+        $(panWrapper).append(loadingImg);
 
 		var zi = document.createElement('a');
 		$(zi).addClass("controls in");
@@ -57,10 +61,17 @@ jQuery.fn.extend({
 			var t = $(this);
 			var big = t.attr("data-big");
 			//If there's no data-big attribute, use the src of the image (sometimes they are simply limited in size with CSS and you just need a zoom of that)
-			if (big == undefined) 
+			if (big == undefined)
 				big = t.attr("src");
-			$(".panWrapper").show();
-			$(".panWrapper img.i").css("width", "auto").attr("src", big).on('load', function () { panInit(e); });
+            //Show the loader
+            $('#loading').addClass('loading');
+            //Hide the previous image if any
+            $('.panWrapper img.i').attr('src', '');
+            $(".panWrapper").show();
+			$(".panWrapper img.i").css("width", "auto").attr("src", big).on('load', function () {
+                $('#loading').removeClass('loading');
+                panInit(e);
+            });
 			return false;
 		});
 
@@ -127,7 +138,7 @@ jQuery.fn.extend({
         }
 
 		function panInit(event) {
-			event.preventDefault();
+            event.preventDefault();
 			var panImg = $(".panWrapper img.i");
 			var panWrapper = $(".panWrapper");
 
@@ -136,16 +147,16 @@ jQuery.fn.extend({
             var vpW = $(panWrapper).width();   //Viewport width
             var vpH = $(panWrapper).height();   //Viewport height
 
-            /*Margin on the left (difference between the width of the container and the image width). 
-            If the image is wider than the container, it's negative (the image goes outside the viewport), 
+            /*Margin on the left (difference between the width of the container and the image width).
+            If the image is wider than the container, it's negative (the image goes outside the viewport),
             if the image is less wide than the container, it's positive (it's the ammount of margin on the left to center the image) */
 			var ml = -(w - vpW);
             //Idem with the height
-            var mt = -(h - vpH);  
+            var mt = -(h - vpH);
             //The amount of scroll from the top in the current page, to correct for pointer position
             var scrollHOffset = window.pageXOffset || document.documentElement.scrollLeft,
                 scrollVOffset = window.pageYOffset || document.documentElement.scrollTop;
-            
+
             //Left position of the pointer in page (first, try mouse, then try jQuery touch, default case native event touch for old jQuery versions), and in Viewport (substracting the scroll from left)
             var posOfPointerInPageX     = __getPointerPosX(event),
                 posOfPointerInViewportX =  posOfPointerInPageX - scrollHOffset,
@@ -175,7 +186,7 @@ jQuery.fn.extend({
 			else if (vpH > h) { //If the image height is less than the viewport height, center it vertically
 				nt = (vpH - h) / 2;
 			}
-            
+
             //Position image in viewport as calculated
             panImg.css("left", nl + 'px');
 			panImg.css("top", nt + 'px');

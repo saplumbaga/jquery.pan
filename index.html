@@ -1,9 +1,9 @@
-<!DOCTYPE HTML> 
+<!DOCTYPE HTML>
 <html>
 <head>
 <title>Fullscreen Image Zoom and Pan with Jquery</title>
 <meta http-equiv="X-UA-Compatible" content="IE=8">
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/> 
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
 <link href="dist/css/jquery.pan.css" rel="stylesheet" type="text/css"/>
 
 </head>
@@ -25,13 +25,13 @@
 
 <p>All images from <a href="http://www.freeimages.com/" target="_blank">freeimages.com</a></p>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <script src="src/js/jquery.pan.js"></script>
 <script type="text/javascript">
 
-	$(document).ready(function(){
+    $(window).on('load', function() {
 		$(".pan").pan();
-	})
+    });
 </script>
 
 </body>
