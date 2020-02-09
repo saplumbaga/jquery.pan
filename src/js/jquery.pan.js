@@ -3,7 +3,7 @@ Fullscreen Image Zoom and Pan with Jquery
 version @VERSION@
 
 Original version by Samil Hazir (https://github.com/saplumbaga)
-V.2.1 by JM Alarcon (https://github.com/jmalarcon/)
+V.2.2 by JM Alarcon (https://github.com/jmalarcon/)
 
 https://github.com/saplumbaga/jquery.pan
 https://github.com/jmalarcon/jquery.pan
@@ -11,7 +11,9 @@ https://github.com/jmalarcon/jquery.pan
 
 jQuery.fn.extend({
 
-	pan: function () {
+    //showRotationControls, def: true
+    //keepAngle, def: false
+    pan: function (showRotationControls, keepAngle) {
 
 		var panWrapper = document.createElement('div');
 		$(panWrapper).addClass("panWrapper");
@@ -29,7 +31,22 @@ jQuery.fn.extend({
 
 		var zo = document.createElement('a');
 		$(zo).addClass("controls out");
-		$(panWrapper).append(zo);
+        $(panWrapper).append(zo);
+
+        //Check if the rotation controls must be shown or not
+        showRotationControls = showRotationControls != false;   //true default value
+        if (showRotationControls) {
+            var rc = document.createElement('a');
+            $(rc).addClass("controls rc");
+            $(panWrapper).append(rc);
+
+            var ra = document.createElement('a');
+            $(ra).addClass("controls ra");
+            $(panWrapper).append(ra);
+        }
+        //If not set explicitly the rotation state is not kept between different images
+        keepAngle = typeof(keepAngle) === 'boolean' ? keepAngle : false;
+        $(panImg).data('keepAngle', keepAngle);
 
 		var close = document.createElement('a');
 		$(close).addClass("controls close");
@@ -66,9 +83,9 @@ jQuery.fn.extend({
             //Show the loader
             $('#loading').addClass('loading');
             //Hide the previous image if any
-            $('.panWrapper img.i').attr('src', '');
+            var imgViewer = $('.panWrapper img.i').attr('src', '');
             $(".panWrapper").show();
-			$(".panWrapper img.i").css("width", "auto").attr("src", big).on('load', function () {
+			imgViewer.css("width", "auto").attr("src", big).on('load', function () {
                 $('#loading').removeClass('loading');
                 panInit(e);
             });
@@ -85,10 +102,37 @@ jQuery.fn.extend({
 			var panImg = $(".panWrapper img.i");
 			panImg.css("width", parseInt(parseInt(panImg.css("width")) / 1.2) + 1);
 			panInit(e);
-		});
+        });
+
+        if (showRotationControls) {
+            $(rc).click(function (e) {
+                var panImg = $(".panWrapper img.i").first();
+                var angle = parseInt((panImg.data('rotAngle'))) || 0;
+                angle += 90;
+                panImg.css({'transform' : 'rotate(' + angle + 'deg)'});
+                panImg.data('rotAngle', angle);
+                panInit(e);
+            });
+
+            $(ra).click(function (e) {
+                var panImg = $(".panWrapper img.i").first();
+                var angle = (panImg.data('rotAngle')) || 0;
+                angle -= 90;
+                panImg.css({'transform' : 'rotate(' + angle + 'deg)'});
+                panImg.data('rotAngle', angle);
+                panInit(e);
+            });
+        }
 
 		$(close).click(function (e) {
-			$(".panWrapper").fadeOut("slow");
+            $(".panWrapper").fadeOut("slow", function(){
+                var panImg = $(".panWrapper img.i").first();
+                var keepAngle = panImg.data('keepAngle');
+                if (!keepAngle){
+                    panImg.css({'transform' : 'rotate(0)'});
+                    panImg.data('rotAngle', 0);
+                }
+            });
 		});
 
 		$(panImg).click(function(){
@@ -147,6 +191,13 @@ jQuery.fn.extend({
             var vpW = $(panWrapper).width();   //Viewport width
             var vpH = $(panWrapper).height();   //Viewport height
 
+            //Swap dimensions if image is rotated from the original angle (0)
+            var angle = parseInt((panImg.data('rotAngle'))) || 0;
+            var rotated = angle % 180 != 0;
+            if (rotated) {
+                w = [h, h=w][0];    //for old browsers that don't support destructuration
+            }
+
             /*Margin on the left (difference between the width of the container and the image width).
             If the image is wider than the container, it's negative (the image goes outside the viewport),
             if the image is less wide than the container, it's positive (it's the ammount of margin on the left to center the image) */
@@ -173,25 +224,48 @@ jQuery.fn.extend({
 
             //New left: the new amount we need to move from the left to show other parts of the image depending on the current mouse position
             var nl = Math.floor((ml * posOfPointerInViewportX) / vpW);
+
             //New top: the new amount we need to move from the top to show other parts of the image depending on the current mouse position
             var nt = Math.floor(mt * posOfPointerInViewportY / vpH);
 
+            var leftWhenCentered =  (vpW - w) / 2;
+            var topWhencentered =  (vpH - h) / 2;
+
 			if (vpW > w && vpH > h) {   //If the image is smaller than the available viewport, center it in both directions
-				nl = (vpW - w) / 2;
-				nt = (vpH - h) / 2;
+				nl = leftWhenCentered;
+				nt = topWhencentered;
 			}
 			else if (vpW > w) { //If the image width is less than the viewport, center it horizontally
-				nl = (vpW - w) / 2;
+				nl = leftWhenCentered;
 			}
 			else if (vpH > h) { //If the image height is less than the viewport height, center it vertically
-				nt = (vpH - h) / 2;
+				nt = topWhencentered;
 			}
 
             //Position image in viewport as calculated
-            panImg.css("left", nl + 'px');
-			panImg.css("top", nt + 'px');
-		}
-		return finalSet;
+            var tX = 0, tY=0;
+            switch(Math.abs(angle % 360)) {
+                case 0:
+                    tX = nl;
+                    tY = nt;
+                    break;
+                case 90:
+                    tX = nt;
+                    tY = -(w+nl);
+                    break;
+                case 180:
+                    tX = -(w+nl)
+                    tY = -(h+nt);
+                    break;
+                case 270:
+                    tX = -h-nt;
+                    tY = nl;
+                    break;
+            }
+            panImg.css('transform', 'rotate(' + angle + 'deg) translate(' + tX + 'px,' + tY + 'px)');
+
+            return finalSet;
+        }
 	}
 });
 

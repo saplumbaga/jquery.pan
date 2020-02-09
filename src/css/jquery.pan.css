@@ -48,6 +48,16 @@
     top: 30px;
 }
 
+.panWrapper a.controls.rc {
+    background-image: url('img/rotatecw.png');
+    margin-left: 90px;
+}
+
+.panWrapper a.controls.ra {
+    background-image: url('img/rotateaw.png');
+    margin-left: -90px;
+}
+
 .panWrapper .loading {
     z-index: 3;
     position: absolute;
@@ -62,6 +72,7 @@
     display: block;
 }
 
-.panWrapper img {
+.panWrapper img.i {
     max-width: unset !important;
+    transform-origin: top left !important;
 }
