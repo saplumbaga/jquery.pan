@@ -13,13 +13,13 @@ jQuery.fn.extend({
 
     //showRotationControls, def: true
     //keepAngle, def: false
-    pan: function (showRotationControls, keepAngle) {
+    pan: function (showRotationControls) {
 
 		var panWrapper = document.createElement('div');
 		$(panWrapper).addClass("panWrapper");
 
 		var panImg = document.createElement('img');
-		$(panImg).addClass("i").css("position", "absolute");
+        $(panImg).addClass("i").css("position", "absolute");
 
         var loadingImg = document.createElement('div');
 		$(loadingImg).attr('id', 'loading').addClass("loading");
@@ -108,7 +108,7 @@ jQuery.fn.extend({
             $(rc).click(function (e) {
                 var panImg = $(".panWrapper img.i").first();
                 var angle = parseInt((panImg.data('rotAngle'))) || 0;
-                angle += 90;
+                angle = (angle + 90) % 360
                 panImg.css({'transform' : 'rotate(' + angle + 'deg)'});
                 panImg.data('rotAngle', angle);
                 panInit(e);
@@ -117,7 +117,7 @@ jQuery.fn.extend({
             $(ra).click(function (e) {
                 var panImg = $(".panWrapper img.i").first();
                 var angle = (panImg.data('rotAngle')) || 0;
-                angle -= 90;
+                angle = (angle - 90) % 360
                 panImg.css({'transform' : 'rotate(' + angle + 'deg)'});
                 panImg.data('rotAngle', angle);
                 panInit(e);
@@ -244,20 +244,23 @@ jQuery.fn.extend({
 
             //Position image in viewport as calculated
             var tX = 0, tY=0;
-            switch(Math.abs(angle % 360)) {
+            switch(angle % 360) {
                 case 0:
                     tX = nl;
                     tY = nt;
                     break;
                 case 90:
+                case -270:
                     tX = nt;
                     tY = -(w+nl);
                     break;
                 case 180:
+                case -180:
                     tX = -(w+nl)
                     tY = -(h+nt);
                     break;
                 case 270:
+                case -90:
                     tX = -h-nt;
                     tY = nl;
                     break;
