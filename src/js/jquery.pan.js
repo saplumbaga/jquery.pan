@@ -3,7 +3,7 @@ Fullscreen Image Zoom and Pan with Jquery
 version @VERSION@
 
 Original version by Samil Hazir (https://github.com/saplumbaga)
-V.3.0 by JM Alarcon (https://github.com/jmalarcon/)
+Version 2.x and .3.x by JM Alarcon (https://github.com/jmalarcon/)
 
 https://github.com/saplumbaga/jquery.pan
 https://github.com/jmalarcon/jquery.pan
@@ -123,6 +123,8 @@ jQuery.fn.extend({
 		$(close).click(function (e) {
             $(".panWrapper").fadeOut("slow", function(){
                 var panImg = $(".panWrapper img.i").first();
+                panImg.data('rotAngle', 0);
+                panImg.css({'transform' : 'rotate(0)'});
             });
 		});
 
