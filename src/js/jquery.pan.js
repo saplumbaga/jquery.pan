@@ -43,11 +43,8 @@ jQuery.fn.extend({
             $(ra).addClass("controls ra");
             $(panWrapper).append(ra);
         }
-        //If not set explicitly the rotation state is not kept between different images
-        keepAngle = typeof(keepAngle) === 'boolean' ? keepAngle : false;
-        $(panImg).data('keepAngle', keepAngle);
 
-		var close = document.createElement('a');
+        var close = document.createElement('a');
 		$(close).addClass("controls close");
 		$(panWrapper).append(close);
 
@@ -126,11 +123,6 @@ jQuery.fn.extend({
 		$(close).click(function (e) {
             $(".panWrapper").fadeOut("slow", function(){
                 var panImg = $(".panWrapper img.i").first();
-                var keepAngle = panImg.data('keepAngle');
-                if (!keepAngle){
-                    panImg.css({'transform' : 'rotate(0)'});
-                    panImg.data('rotAngle', 0);
-                }
             });
 		});
 
@@ -266,8 +258,9 @@ jQuery.fn.extend({
             }
             panImg.css('transform', 'rotate(' + angle + 'deg) translate(' + tX + 'px,' + tY + 'px)');
 
-            return finalSet;
         }
+
+        return finalSet;
 	}
 });
 
