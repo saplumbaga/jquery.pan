@@ -7,7 +7,8 @@
     "compressjs": "uglifyjs ./src/js/jquery.pan.js -c --comments --source-map \"root='/', url='jquery.pan.min.js.map'\"  -o ./dist/jquery.pan.min.js",
     "postcompressjs": "cross-var \"replace -s \"@VERSION@\" $npm_package_version ./dist/jquery.pan.min.js\"",
     "compresscss": "uglifycss ./src/css/jquery.pan.css --output ./dist/css/jquery.pan.css",
-    "postcompresscss": "cpx ./src/css/img/* ./dist/css/img",
+    "postcompresscss": "cpy ./src/css/img/* ./dist/css/img",
+    "watch": "onchange ./src/**/*.* -- npm run build",
     "prebuild": "rimraf ./dist/**/*.*",
     "build": "npm run compressjs && npm run compresscss"
   },
@@ -32,8 +33,9 @@
   },
   "homepage": "https://github.com/jmalarcon/jquery.pan#readme",
   "devDependencies": {
-    "cpx": "^1.5.0",
+    "cpy-cli": "^3.1.0",
     "cross-var": "^1.1.0",
+    "onchange": "^6.1.0",
     "replace": "^1.1.5",
     "rimraf": "^3.0.1",
     "uglify-js": "^3.7.7",
