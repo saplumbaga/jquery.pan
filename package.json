@@ -1,7 +1,7 @@
 {
   "name": "jquery.pan",
-  "version": "2.0.3",
-  "description": "Fullscreen Image Zoom and Pan plugin for Jquery, with mobile capabilities",
+  "version": "3.0.0",
+  "description": "Fullscreen Image Zoom, Pan and Rotate plugin for Jquery, with mobile capabilities",
   "main": "dist/jquery.pan.min.js",
   "scripts": {
     "compressjs": "uglifyjs ./src/js/jquery.pan.js -c --comments --source-map \"root='/', url='jquery.pan.min.js.map'\"  -o ./dist/jquery.pan.min.js",
@@ -23,7 +23,7 @@
     "pan",
     "images"
   ],
-  "author": "Samil Hazir",
+  "author": ["Samil Hazir"],
   "contributors": [
     "José M. Alarcón (https://github.com/jmalarcon/)"
   ],
