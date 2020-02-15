@@ -5,7 +5,7 @@
   "main": "dist/jquery.pan.min.js",
   "scripts": {
     "compressjs": "uglifyjs ./src/js/jquery.pan.js -c --comments --source-map \"root='/', url='jquery.pan.min.js.map'\"  -o ./dist/jquery.pan.min.js",
-    "postcompressjs": "cross-var \"replace -s \"@VERSION@\" $npm_package_version ./dist/jquery.pan.min.js\"",
+    "postcompressjs": "cross-var \"replace \"@VERSION@\" $npm_package_version ./dist/jquery.pan.min.js\"",
     "compresscss": "uglifycss ./src/css/jquery.pan.css --output ./dist/css/jquery.pan.css",
     "postcompresscss": "cpy ./src/css/img/* ./dist/css/img",
     "watch": "onchange ./src/**/*.* -- npm run build",
@@ -23,7 +23,7 @@
     "pan",
     "images"
   ],
-  "author": ["Samil Hazir"],
+  "author": "Samil Hazir",
   "contributors": [
     "José M. Alarcón (https://github.com/jmalarcon/)"
   ],
