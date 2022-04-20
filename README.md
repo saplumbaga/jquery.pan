@@ -1,6 +1,6 @@
 # Fullscreen Image Zoom and Pan with Jquery
 
-Original 1.x version written by [Samir Hazir](https://github.com/saplumbaga/jquery.pan). Version 2.x and 3.x written by me.
+Original 1.x version written by [Samil Hazir](https://github.com/saplumbaga). Version 2.x and 3.x written by [José M. Alarcón](https://github.com/jmalarcon).
 
 Fullscreen image zoom, pan and rotation plugin for jQuery
 
