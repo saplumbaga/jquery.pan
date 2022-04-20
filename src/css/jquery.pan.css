@@ -19,6 +19,11 @@
     user-select: none;
 }
 
+.buttonsWrapper {
+    display: block;
+    margin: 0 auto;
+}
+
 .panWrapper a.controls {
     background-size: 100%;
     width: 32px;
@@ -56,6 +61,21 @@
 .panWrapper a.controls.ra {
     background-image: url('img/rotateaw.png');
     margin-left: -90px;
+}
+
+.panWrapper a.controls.link {
+    background-image: url('img/link.png');
+    margin-left: 150px;
+}
+
+/* Hidden by default */
+.panWrapper a.controls.link:not([href]),
+.panWrapper a.controls.link[href=""] {
+    display: none;
+}
+
+.panWrapper a.controls.link[href] {
+    display: block;
 }
 
 .panWrapper .loading {

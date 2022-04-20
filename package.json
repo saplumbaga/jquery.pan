@@ -1,6 +1,6 @@
 {
   "name": "jquery.pan",
-  "version": "3.0.4",
+  "version": "3.1.0",
   "description": "Fullscreen Image Zoom, Pan and Rotate plugin for Jquery, with mobile capabilities",
   "main": "dist/jquery.pan.min.js",
   "scripts": {

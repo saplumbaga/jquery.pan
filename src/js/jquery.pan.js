@@ -44,6 +44,11 @@ jQuery.fn.extend({
             $(panWrapper).append(ra);
         }
 
+        //Add a hidden link button to navigate to
+        var link = document.createElement('a');
+        $(link).addClass("controls link");
+        $(panWrapper).append(link);
+
         var close = document.createElement('a');
 		$(close).addClass("controls close");
 		$(panWrapper).append(close);
@@ -76,6 +81,12 @@ jQuery.fn.extend({
 			//If there's no data-big attribute, use the src of the image (sometimes they are simply limited in size with CSS and you just need a zoom of that)
 			if (big == undefined)
 				big = t.attr("src");
+            //See if the current element is a link and has a href attribute
+            var href = t.attr("href");
+            //In case it has one, add it to the link button (and the specified target)
+            if (href) {
+                $(link).attr("href", href).attr("target", t.attr("target"));
+            }
             //Show the loader
             $('#loading').addClass('loading');
             //Hide the previous image if any
@@ -125,6 +136,8 @@ jQuery.fn.extend({
                 var panImg = $(".panWrapper img.i").first();
                 panImg.data('rotAngle', 0);
                 panImg.css({'transform' : 'rotate(0)'});
+                //Remove possible links
+                $(link).removeAttr("href").removeAttr("target");
             });
 		});
 
