@@ -1,8 +1,8 @@
 # Fullscreen Image Zoom and Pan with Jquery
 
-Original 1.x version written by [Samil Hazir](https://github.com/saplumbaga). Version 2.x and 3.x written by [José M. Alarcón](https://github.com/jmalarcon).
+>Original 1.x version written by [Samil Hazir](https://github.com/saplumbaga). Later versions written and maintained by [José M. Alarcón](https://github.com/jmalarcon).
 
-Fullscreen image zoom, pan and rotation plugin for jQuery
+Fullscreen image zoom, pan and rotation plugin for jQuery with support for links in the images.
 
 Features:
 
@@ -10,8 +10,10 @@ Features:
 - Auto-pan alongside pointer movement
 - Zoom in and out support. You can increase or decrease the zoom level with specific buttons or with the mouse wheel
 - Image rotation support with zoom and pan
+- Link button to open links if the image has a wrapping link
 - Support for mobile devices. You can pan by dragging the zoomed image
 - Support from IE10+ and all modern desktop and mobile browsers
+- Just 2KB minified and gzipped
 
 ## Getting Started
 
@@ -23,11 +25,11 @@ npm i jquery.pan
 
 >Works with jQuery 3.0+.
 
-You must include a small CSS, `jquery.pan.css` in the `dist/css` folder (400b bytes gzipped).
+You must include a small CSS, `jquery.pan.css` that is in the `dist/css` folder too (536 bytes gzipped).
 
 ```html
 <link rel="stylesheet" href="css/jquery.pan.css" />
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="jquery.min.js"></script>
 <script src="jquery.pan.js"></script>
 
 <script type="text/javascript">
@@ -68,6 +70,14 @@ $(".gallery img").pan(false);    //No rotation controls
 
 This is useful, for example in blogs or other environments where the images are manually added or reviewed and where images always have the right orientation. In those cases, disabling the rotation controls is a better option.
 
+### Links around images
+
+Any images that are wrapped with a link (`<a>` element) will have a button in the viewer to open the link. Try it with any image from the fourth onwards [in the sample page](https://jmalarcon.github.io/jquery.pan/).
+
+The link button in the viewer will use the same `target` attribute as the original wrapping link so that it will open in the right window. For example, if it has a `target="_blank"` attribute, the link button in the viewer will have this too ensuring it opens in a new tab.
+
+The link button in the viewer will use the `title` attribute of the link to show a tooltip.
+
 ### Returning value
 
 This `pan()` method filters out the jQuery selection and returns a new jQuery selection with the final elements that have been processed to have zoom & pan capabilities. You can further process them as usual with jQuery, for example:
@@ -81,5 +91,6 @@ $(function(){
 ```
 
 ## License
-Copyright (c) 2016 Samil Hazir, 2018-2020 José M. Alarcon
+
+Copyright (c) 2016 Samil Hazir, 2018-2022 José M. Alarcon
 Dual licensed under the GPL and MIT licenses.

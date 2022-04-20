@@ -3,7 +3,7 @@ Fullscreen Image Zoom and Pan with Jquery
 version @VERSION@
 
 Original version by Samil Hazir (https://github.com/saplumbaga)
-Version 2.x and .3.x by JM Alarcon (https://github.com/jmalarcon/)
+later versions by JM Alarcon (https://github.com/jmalarcon/)
 
 https://github.com/saplumbaga/jquery.pan
 https://github.com/jmalarcon/jquery.pan
@@ -24,36 +24,46 @@ jQuery.fn.extend({
 		$(loadingImg).attr('id', 'loading').addClass("loading");
         $(panWrapper).append(loadingImg);
 
+        var buttonsWrapper = document.createElement('div');
+        $(buttonsWrapper).addClass("buttonsWrapper");
+
 		var zi = document.createElement('a');
 		$(zi).addClass("controls in");
-		$(panWrapper).append(zi);
 
 		var zo = document.createElement('a');
 		$(zo).addClass("controls out");
-        $(panWrapper).append(zo);
 
         //Check if the rotation controls must be shown or not
         showRotationControls = showRotationControls != false;   //true default value
         if (showRotationControls) {
             var rc = document.createElement('a');
             $(rc).addClass("controls rc");
-            $(panWrapper).append(rc);
 
             var ra = document.createElement('a');
             $(ra).addClass("controls ra");
-            $(panWrapper).append(ra);
         }
 
         //Add a hidden link button to navigate to
         var link = document.createElement('a');
         $(link).addClass("controls link");
-        $(panWrapper).append(link);
 
         var close = document.createElement('a');
 		$(close).addClass("controls close");
 		$(panWrapper).append(close);
 
-		$(panWrapper).append(panImg);
+        //Add buttons to the buttons wrapper in the right order
+        $(buttonsWrapper).append(zi); //Zoom in
+        if (showRotationControls) {
+            $(buttonsWrapper).append(rc);   //Rotate clockwise
+        }
+        $(buttonsWrapper).append(link); //Link
+        if (showRotationControls) {
+            $(buttonsWrapper).append(ra);   //Rotation anti-clockwise
+        }
+        $(buttonsWrapper).append(zo); //Zoom out
+
+		$(panWrapper).append(panImg);   //Zoomed image container
+        $(panWrapper).append(buttonsWrapper);   //Buttons container
 		$("body").append(panWrapper);
 
 		//Remove from set those image elements that are already shown in their natural size (they don't need zoom at all)
@@ -83,9 +93,9 @@ jQuery.fn.extend({
 				big = t.attr("src");
             //See if the current element is a link and has a href attribute
             var href = t.attr("href");
-            //In case it has one, add it to the link button (and the specified target)
+            //In case it has one, add it to the link button (and the specified target, and the title (if available) or the URL)
             if (href) {
-                $(link).attr("href", href).attr("target", t.attr("target"));
+                $(link).attr("href", href).attr("target", t.attr("target")).attr("title", t.attr("title") ? t.attr("title"): href);
             }
             //Show the loader
             $('#loading').addClass('loading');
