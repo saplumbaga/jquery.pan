@@ -70,7 +70,7 @@ jQuery.fn.extend({
 
 		finalSet.css('cursor', 'zoom-in');
 
-		finalSet.click(function (e) {
+		finalSet.on('click', function(e) {
 			var t = $(this);
 			var big = t.attr("data-big");
 			//If there's no data-big attribute, use the src of the image (sometimes they are simply limited in size with CSS and you just need a zoom of that)
@@ -88,20 +88,20 @@ jQuery.fn.extend({
 			return false;
 		});
 
-		$(zi).click(function (e) {
+		$(zi).on('click', function(e) {
 			var panImg = $(".panWrapper img.i");
 			panImg.css("width", parseInt(parseInt(panImg.css("width")) * 1.2));
 			panInit(e);
 		});
 
-		$(zo).click(function (e) {
+		$(zo).on('click', function(e) {
 			var panImg = $(".panWrapper img.i");
 			panImg.css("width", parseInt(parseInt(panImg.css("width")) / 1.2) + 1);
 			panInit(e);
         });
 
         if (showRotationControls) {
-            $(rc).click(function (e) {
+            $(rc).on('click', function(e) {
                 var panImg = $(".panWrapper img.i").first();
                 var angle = parseInt((panImg.data('rotAngle'))) || 0;
                 angle = (angle + 90) % 360
@@ -110,7 +110,7 @@ jQuery.fn.extend({
                 panInit(e);
             });
 
-            $(ra).click(function (e) {
+            $(ra).on('click', function(e) {
                 var panImg = $(".panWrapper img.i").first();
                 var angle = (panImg.data('rotAngle')) || 0;
                 angle = (angle - 90) % 360
@@ -120,7 +120,7 @@ jQuery.fn.extend({
             });
         }
 
-		$(close).click(function (e) {
+		$(close).on('click', function(e) {
             $(".panWrapper").fadeOut("slow", function(){
                 var panImg = $(".panWrapper img.i").first();
                 panImg.data('rotAngle', 0);
@@ -128,26 +128,26 @@ jQuery.fn.extend({
             });
 		});
 
-		$(panImg).click(function(){
-			$(close).click();
+		$(panImg).on('click', function(){
+			$(close).trigger('click');
 		});
 
 		$(panWrapper).on('mousemove touchmove', function (e) {
 			panInit(e);
 		});
 
-		$("body").keydown(function (e) {
+		$("body").on('keydown', function (e) {
 			if (e.keyCode == 27) {
-				$(close).click();
+				$(close).trigger('click');
 			}
 		});
 
 		$(panWrapper).mousewheel(function (wheelEvent) {
 
 			if (wheelEvent.deltaY > 0)
-				$(zo).click();
+				$(zo).trigger('click');
 			else
-				$(zi).click();
+				$(zi).trigger('click');
 
 			panInit(wheelEvent);
 

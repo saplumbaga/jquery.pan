@@ -33,15 +33,15 @@
   },
   "homepage": "https://github.com/jmalarcon/jquery.pan#readme",
   "devDependencies": {
-    "cpy-cli": "^3.1.1",
+    "cpy-cli": "^4.1.0",
     "cross-var": "^1.1.0",
-    "onchange": "^6.1.0",
-    "replace": "^1.2.0",
+    "onchange": "^7.1.0",
+    "replace": "^1.2.1",
     "rimraf": "^3.0.2",
-    "uglify-js": "^3.8.1",
+    "uglify-js": "^3.15.4",
     "uglifycss": "0.0.29"
   },
   "dependencies": {
-    "jquery": "^3.0.0"
+    "jquery": "^3.6.0"
   }
 }
