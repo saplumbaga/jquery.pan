@@ -66,37 +66,66 @@ jQuery.fn.extend({
         $(panWrapper).append(buttonsWrapper);   //Buttons container
 		$("body").append(panWrapper);
 
-		//Remove from set those image elements that are already shown in their natural size (they don't need zoom at all)
-		//If the element is not an image it's not filtered
+		//Remove from set those elements that don't contain images smaller than their natural size (they don't need zoom at all)
+        //or elements that don't have a data-big attribute (they don't have a big image to zoom to)
 		var finalSet = $(this).filter(function() {
             if ($(this).attr('data-big'))
                 return true;
-			if (this.tagName == "IMG") {
-				var nW = this.naturalWidth || 0,
-					nH = this.naturalHeight || 0,
-					w = $(this).outerWidth(),
-                    h = $(this).outerHeight();
-				return (nW > w || nH > h);
-			}
-			else {
-				return true;
-			}
+
+            //Get all the images inside the element to check for zoom needed
+            var imgElts = __getImgElts(this);
+            //Check each image to see if it needs zoom
+            if (imgElts.length > 0) {
+                for (var i = 0; i < imgElts.length; i++) {
+                    //if any of them needs zoom, include the element in the final set
+                    if (__imgNeedsZoom(imgElts[i])) {
+                        return true;
+                    }
+                }
+                //If no image needs zoom, don't include the element in the final set
+                return false;
+            }
+            else {
+                return false;
+            }
 		});
 
 		finalSet.css('cursor', 'zoom-in');
 
 		finalSet.on('click', function(e) {
 			var t = $(this);
-			var big = t.attr("data-big");
-			//If there's no data-big attribute, use the src of the image (sometimes they are simply limited in size with CSS and you just need a zoom of that)
-			if (big == undefined)
-				big = t.attr("src");
+			/*
+            Check the data-big attribute of the element.
+            Sometimes the element to initiate the zoom is not an image
+            (maybe it has a background or we just want to use it as a zoom trigger)
+            */
+            var big = t.attr("data-big");
+			//If there's no data-big attribute, use the data-big or src of the image inside the element that fired the event
+			if (big == undefined) {
+                //Check if the element that fired the event is an image
+                if (e.target.tagName == "IMG") {
+                    big = e.target.getAttribute('data-big') || e.target.src;
+                }
+                else {
+                    //This shouldn't happen, but just in case (don't do anything)
+                    return;
+                }
+            }
+
             //See if the current element is a link and has a href attribute
             var href = t.attr("href");
-            //In case it has one, add it to the link button (and the specified target, and the title (if available) or the URL)
-            if (href) {
-                $(link).attr("href", href).attr("target", t.attr("target")).attr("title", t.attr("title") ? t.attr("title"): href);
+            var linkElt = t;
+            //If the element is not a link, find the first parent that is a link
+            if (!href) {
+                var parents = t.parents("a");
+                if (parents.length > 0) {
+                    linkElt = $(parents[0]);
+                    href = linkElt.attr("href");
+                }
             }
+            //In case it has a link, add the href to the link button (and the specified target, and the title (if available) or the URL)
+            if (href) $(link).attr("href", href).attr("target", linkElt.attr("target")).attr("title", linkElt.attr("title") ? linkElt.attr("title"): href);
+
             //Show the loader
             $('#loading').addClass('loading');
             //Hide the previous image if any
@@ -175,6 +204,40 @@ jQuery.fn.extend({
 			panInit(wheelEvent);
 
 		});
+
+        //Finds the image elements in the element passed as argument, or one of its descendants.
+        //Always returns an array
+        function __getImgElts(root){
+            //If the element is already an image, return it
+            if (root.tagName == "IMG") return [root];
+            //If it's not an image, find the first image in its descendants
+            var imgElts = $(root).find("img");
+            if (imgElts.length > 0) {
+                return imgElts.get();
+            }
+            else return null;
+        }
+
+        //Checks if one image is smaller that its natural size
+        //or if it has a data-big attribute
+        //The parameter is always an image element
+        function __imgNeedsZoom(imgElt) {
+            if (imgElt) {
+                if (imgElt.getAttribute('data-big'))
+                    return true;
+
+                //If it's an image or contains one, check if it's already in its natural size
+				var nW = imgElt.naturalWidth || 0,
+					nH = imgElt.naturalHeight || 0,
+					w = $(imgElt).outerWidth(),
+                    h = $(imgElt).outerHeight();
+				return (nW > w || nH > h);
+			}
+			else {
+                //If it doesn't have a data-big attribute or is not smaller thant it's natural dimensions, can't zoom it
+				return false;
+			}
+        }
 
         //The next function encapsulates the whole logic of getting the pointer position in every case
         function __getPointerPos(event, prop) {

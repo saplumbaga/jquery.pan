@@ -6,11 +6,11 @@ Fullscreen image zoom, pan and rotation plugin for jQuery with support for links
 
 Features:
 
-- Automatically add zoom and pan to any images or elements with images
+- Automatically add zoom and pan to any images or elements with images inside
 - Auto-pan alongside pointer movement
 - Zoom in and out support. You can increase or decrease the zoom level with specific buttons or with the mouse wheel
 - Image rotation support with zoom and pan
-- Link button to open links if the image has a wrapping link
+- Link button to open links if the image has a wrapping link (in any parent element)
 - Support for mobile devices. You can pan by dragging the zoomed image
 - Support from IE10+ and all modern desktop and mobile browsers
 - Just 2KB minified and gzipped
@@ -39,7 +39,7 @@ You must include a small CSS, `jquery.pan.css` that is in the `dist/css` folder 
 </script>
 ```
 
-If there's a `data-big` attribute in the element, then that URL will be used for the zoomed image instead of the current image. If there's not a `data-big` attribute, then it should be an `<img>` element and the `src` attribute will be used to zoom the image, since a lot of images are limited in size to fit in their container (for example with the `max-width` property). Check out the `index.html` sample file in the repo:
+If there's a `data-big` attribute in the element, then that URL will be used for the zoomed image instead of the current image. If there's not a `data-big` attribute, then it will zoom any `<img>` element inside the element that has the `pan()` method applied, and then the specific `data-big` or the `src` attributes will be used to zoom the image, since a lot of images are limited in size to fit in their container (for example with the `max-width` property). Check out the `index.html` sample file in the repo:
 
 ```html
 <a class="pan" data-big="img/big1.jpg" href="#">
@@ -51,6 +51,8 @@ If there's a `data-big` attribute in the element, then that URL will be used for
 Therefore you can use it to show images by clicking on elements, even it those don't are images or don't include images.
 
 >**IMPORTANT**: it only adds the zoom capability to images that are **smaller than their natural size** or that have a `data-big` attribute, since small images don't need it. This is by design, since this is not a carrousel kind of viewer, but an individual image viewer.
+
+If a container element is selected to be zoomed, if it contains more than one image, every image will be zoomed and panned independently if there's at least one that needs zoom. In this case all of them will be zoomed, even if they don't need it because they are in their natural size. Check the sample page.
 
 ### Disable image rotation
 

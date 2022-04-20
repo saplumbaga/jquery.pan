@@ -15,13 +15,33 @@
 
 <hr />
 
-<a class="pan" data-big="img/big1.jpg" href="#"><img src="img/small1.jpg" title="Click to zoom" /></a>
-<img class="pan" style="max-width:150px;" src="img/big2.jpg" title="Click to zoom" />
+<h3>This image needs zoom and is included inside a div with a data-big attribute. Since it's a div you can click anywhere, even not in the image:</h3>
+<div class="pan" data-big="img/big1.jpg">
+    <img src="img/small1.jpg" title="Click to zoom" />
+</div>
+<h3>This one is inside a link with a title and a target. The image is limited in size with CSS, so it needs a zoom:</h3>
+<a href="https://github.com/jmalarcon/jquery.pan" title="Visit the project's repo" target="_blank">
+    <img class="pan" style="max-width:150px;" src="img/big2.jpg" title="Click to zoom" />
+</a>
+
+<h3>This one is small and no zoom is needed, so it does nothing despite being in the selection:</h3>
 <img class="pan" style="max-width:150px;" src="img/small2.jpg" title="Not zoom needed for this one" />
-<a class="pan" data-big="img/big3.jpg" href="https://github.com/jmalarcon/jquery.pan" target="_blank" title="Visit repo"><img src="img/small3.jpg"/></a>
-<a class="pan" data-big="img/big4.jpg" href="https://www.campusmvp.es" title="Los mejores cursos online para programadores" target="_blank"><img src="img/small4.jpg" title="Click to zoom" /></a>
-<a class="pan" data-big="img/big5.jpg" href="https://github.com/jmalarcon/jquery.pan" target="_blank" title="Visit repo"><img src="img/small5.jpg"/></a>
-<a class="pan" data-big="img/big6.jpg" href="https://github.com/jmalarcon/jquery.pan" target="_blank" title="Visit repo"><img src="img/small6.jpg"/></a>
+
+<h3>Another couple of images, one without and the other with a wrapping link:</h3>
+<img class="pan" data-big="img/big3.jpg" src="img/small3.jpg"/>
+<a class="pan" data-big="img/big4.jpg" href="https://www.campusmvp.es" title="Los mejores cursos online para programadores" target="_blank">
+    <img src="img/small4.jpg" title="Click to zoom" />
+</a>
+
+<h3>These three are all inside the same link. Only two need zoom, but all get the zoom applied <br>because the wrapping element is selected for zoom & pan.<br>They zoom independently but all use the common link in the viewer to navigate to the original URL:</h3>
+<a class="pan" href="https://github.com/jmalarcon/jquery.pan" target="_blank" title="Visit repo">
+    <img data-big="img/big5.jpg" src="img/small5.jpg"/>
+    <img src="img/small3.jpg" title="This one doesn't need a zoom"/>
+    <img src="img/big6.jpg" style="max-width: 150px;"/>
+</a>
+
+<h3>This last one is a single image, with its size limited by CSS:</h3>
+<img class="pan" src="img/big6.jpg" style="max-width: 150px;"/>
 
 <p>All images from <a href="http://www.freeimages.com/" target="_blank">freeimages.com</a></p>
 
