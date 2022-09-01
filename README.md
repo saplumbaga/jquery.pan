@@ -91,6 +91,30 @@ $(function(){
     });
 })
 ```
+### Dynamically add new images
+
+Pan capabilities can be applied to newly added images. An example use case is to display user selected image files. 
+
+Initialize pan first:
+
+```javascript
+    $(function(){
+        $().pan(true,true,false);
+        /* Arguments:
+        1. Rotatiom
+        2. Initialize pan
+        3. Add image
+        */
+    })
+```
+Add pan capabilities to new images:
+
+```javascript
+// img variable is the img element
+img.onload = function (){
+    $(this).pan(false, false, true);
+}
+```
 
 ## License
 

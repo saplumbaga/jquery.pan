@@ -12,202 +12,132 @@ https://github.com/jmalarcon/jquery.pan
 jQuery.fn.extend({
 
     //showRotationControls, def: true
-    pan: function (showRotationControls) {
+    pan: function (showRotationControls = true, init = true, addImage = true) {
 
-		var panWrapper = document.createElement('div');
-		$(panWrapper).addClass("panWrapper");
+        if (init) {
+            var panWrapper = document.createElement('div');
+            $(panWrapper).addClass("panWrapper");
 
-		var panImg = document.createElement('img');
-        $(panImg).addClass("i").css("position", "absolute");
+            var panImg = document.createElement('img');
+            $(panImg).addClass("i").css("position", "absolute");
 
-        var loadingImg = document.createElement('div');
-		$(loadingImg).attr('id', 'loading').addClass("loading");
-        $(panWrapper).append(loadingImg);
+            var loadingImg = document.createElement('div');
+            $(loadingImg).attr('id', 'loading').addClass("loading");
+            $(panWrapper).append(loadingImg);
 
-        var buttonsWrapper = document.createElement('div');
-        $(buttonsWrapper).addClass("buttonsWrapper");
+            var buttonsWrapper = document.createElement('div');
+            $(buttonsWrapper).addClass("buttonsWrapper");
 
-		var zi = document.createElement('a');
-		$(zi).addClass("controls in");
+            var zi = document.createElement('a');
+            $(zi).addClass("controls in");
 
-		var zo = document.createElement('a');
-		$(zo).addClass("controls out");
+            var zo = document.createElement('a');
+            $(zo).addClass("controls out");
 
-        //Check if the rotation controls must be shown or not
-        showRotationControls = showRotationControls != false;   //true default value
-        if (showRotationControls) {
-            var rc = document.createElement('a');
-            $(rc).addClass("controls rc");
+            //Check if the rotation controls must be shown or not
+            showRotationControls = showRotationControls != false;   //true default value
+            if (showRotationControls) {
+                var rc = document.createElement('a');
+                $(rc).addClass("controls rc");
 
-            var ra = document.createElement('a');
-            $(ra).addClass("controls ra");
-        }
-
-        //Add a hidden link button to navigate to
-        var link = document.createElement('a');
-        $(link).addClass("controls link");
-
-        var close = document.createElement('a');
-		$(close).addClass("controls close");
-		$(panWrapper).append(close);
-
-        //Add buttons to the buttons wrapper in the right order
-        $(buttonsWrapper).append(zi); //Zoom in
-        if (showRotationControls) {
-            $(buttonsWrapper).append(rc);   //Rotate clockwise
-        }
-        $(buttonsWrapper).append(link); //Link
-        if (showRotationControls) {
-            $(buttonsWrapper).append(ra);   //Rotation anti-clockwise
-        }
-        $(buttonsWrapper).append(zo); //Zoom out
-
-		$(panWrapper).append(panImg);   //Zoomed image container
-        $(panWrapper).append(buttonsWrapper);   //Buttons container
-		$("body").append(panWrapper);
-
-		//Remove from set those elements that don't contain images smaller than their natural size (they don't need zoom at all)
-        //or elements that don't have a data-big attribute (they don't have a big image to zoom to)
-		var finalSet = $(this).filter(function() {
-            if ($(this).attr('data-big'))
-                return true;
-
-            //Get all the images inside the element to check for zoom needed
-            var imgElts = __getImgElts(this);
-            //Check each image to see if it needs zoom
-            if (imgElts.length > 0) {
-                for (var i = 0; i < imgElts.length; i++) {
-                    //if any of them needs zoom, include the element in the final set
-                    if (__imgNeedsZoom(imgElts[i])) {
-                        return true;
-                    }
-                }
-                //If no image needs zoom, don't include the element in the final set
-                return false;
-            }
-            else {
-                return false;
-            }
-		});
-
-		finalSet.css('cursor', 'zoom-in');
-
-		finalSet.on('click', function(e) {
-			var t = $(this);
-			/*
-            Check the data-big attribute of the element.
-            Sometimes the element to initiate the zoom is not an image
-            (maybe it has a background or we just want to use it as a zoom trigger)
-            */
-            var big = t.attr("data-big");
-			//If there's no data-big attribute, use the data-big or src of the image inside the element that fired the event
-			if (big == undefined) {
-                //Check if the element that fired the event is an image
-                if (e.target.tagName == "IMG") {
-                    big = e.target.getAttribute('data-big') || e.target.src;
-                }
-                else {
-                    //This shouldn't happen, but just in case (don't do anything)
-                    return;
-                }
+                var ra = document.createElement('a');
+                $(ra).addClass("controls ra");
             }
 
-            //See if the current element is a link and has a href attribute
-            var href = t.attr("href");
-            var linkElt = t;
-            //If the element is not a link, find the first parent that is a link
-            if (!href) {
-                var parents = t.parents("a");
-                if (parents.length > 0) {
-                    linkElt = $(parents[0]);
-                    href = linkElt.attr("href");
-                }
+            //Add a hidden link button to navigate to
+            var link = document.createElement('a');
+            $(link).addClass("controls link");
+
+            var close = document.createElement('a');
+            $(close).addClass("controls close");
+            $(panWrapper).append(close);
+
+            //Add buttons to the buttons wrapper in the right order
+            $(buttonsWrapper).append(zi); //Zoom in
+            if (showRotationControls) {
+                $(buttonsWrapper).append(rc);   //Rotate clockwise
             }
-            //In case it has a link, add the href to the link button (and the specified target, and the title (if available) or the URL)
-            if (href) $(link).attr("href", href).attr("target", linkElt.attr("target")).attr("title", linkElt.attr("title") ? linkElt.attr("title"): href);
+            $(buttonsWrapper).append(link); //Link
+            if (showRotationControls) {
+                $(buttonsWrapper).append(ra);   //Rotation anti-clockwise
+            }
+            $(buttonsWrapper).append(zo); //Zoom out
 
-            //Show the loader
-            $('#loading').addClass('loading');
-            //Hide the previous image if any
-            var imgViewer = $('.panWrapper img.i').attr('src', '');
-            $(".panWrapper").show();
-			imgViewer.css("width", "auto").attr("src", big).on('load', function () {
-                $('#loading').removeClass('loading');
-                panInit(e);
-            });
-			return false;
-		});
+            $(panWrapper).append(panImg);   //Zoomed image container
+            $(panWrapper).append(buttonsWrapper);   //Buttons container
+            $("body").append(panWrapper);
 
-		$(zi).on('click', function(e) {
-			var panImg = $(".panWrapper img.i");
-			panImg.css("width", parseInt(parseInt(panImg.css("width")) * 1.2));
-			panInit(e);
-		});
-
-		$(zo).on('click', function(e) {
-			var panImg = $(".panWrapper img.i");
-			panImg.css("width", parseInt(parseInt(panImg.css("width")) / 1.2) + 1);
-			panInit(e);
-        });
-
-        if (showRotationControls) {
-            $(rc).on('click', function(e) {
-                var panImg = $(".panWrapper img.i").first();
-                var angle = parseInt((panImg.data('rotAngle'))) || 0;
-                angle = (angle + 90) % 360
-                panImg.css({'transform' : 'rotate(' + angle + 'deg)'});
-                panImg.data('rotAngle', angle);
+            $(zi).on('click', function (e) {
+                var panImg = $(".panWrapper img.i");
+                panImg.css("width", parseInt(parseInt(panImg.css("width")) * 1.2));
                 panInit(e);
             });
 
-            $(ra).on('click', function(e) {
-                var panImg = $(".panWrapper img.i").first();
-                var angle = (panImg.data('rotAngle')) || 0;
-                angle = (angle - 90) % 360
-                panImg.css({'transform' : 'rotate(' + angle + 'deg)'});
-                panImg.data('rotAngle', angle);
+            $(zo).on('click', function (e) {
+                var panImg = $(".panWrapper img.i");
+                panImg.css("width", parseInt(parseInt(panImg.css("width")) / 1.2) + 1);
                 panInit(e);
             });
-        }
 
-		$(close).on('click', function(e) {
-            $(".panWrapper").fadeOut("slow", function(){
-                var panImg = $(".panWrapper img.i").first();
-                panImg.data('rotAngle', 0);
-                panImg.css({'transform' : 'rotate(0)'});
-                //Remove possible links
-                $(link).removeAttr("href").removeAttr("target");
+            if (showRotationControls) {
+                $(rc).on('click', function (e) {
+                    var panImg = $(".panWrapper img.i").first();
+                    var angle = parseInt((panImg.data('rotAngle'))) || 0;
+                    angle = (angle + 90) % 360
+                    panImg.css({ 'transform': 'rotate(' + angle + 'deg)' });
+                    panImg.data('rotAngle', angle);
+                    panInit(e);
+                });
+
+                $(ra).on('click', function (e) {
+                    var panImg = $(".panWrapper img.i").first();
+                    var angle = (panImg.data('rotAngle')) || 0;
+                    angle = (angle - 90) % 360
+                    panImg.css({ 'transform': 'rotate(' + angle + 'deg)' });
+                    panImg.data('rotAngle', angle);
+                    panInit(e);
+                });
+            }
+
+            $(close).on('click', function (e) {
+                $(".panWrapper").fadeOut("slow", function () {
+                    var panImg = $(".panWrapper img.i").first();
+                    panImg.data('rotAngle', 0);
+                    panImg.css({ 'transform': 'rotate(0)' });
+                    //Remove possible links
+                    $(link).removeAttr("href").removeAttr("target");
+                });
             });
-		});
 
-		$(panImg).on('click', function(){
-			$(close).trigger('click');
-		});
+            $(panImg).on('click', function () {
+                $(close).trigger('click');
+            });
 
-		$(panWrapper).on('mousemove touchmove', function (e) {
-			panInit(e);
-		});
+            $(panWrapper).on('mousemove touchmove', function (e) {
+                panInit(e);
+            });
 
-		$("body").on('keydown', function (e) {
-			if (e.keyCode == 27) {
-				$(close).trigger('click');
-			}
-		});
+            $("body").on('keydown', function (e) {
+                if (e.keyCode == 27) {
+                    $(close).trigger('click');
+                }
+            });
 
-		$(panWrapper).mousewheel(function (wheelEvent) {
+            $(panWrapper).mousewheel(function (wheelEvent) {
 
-			if (wheelEvent.deltaY > 0)
-				$(zo).trigger('click');
-			else
-				$(zi).trigger('click');
+                if (wheelEvent.deltaY > 0)
+                    $(zo).trigger('click');
+                else
+                    $(zi).trigger('click');
 
-			panInit(wheelEvent);
+                panInit(wheelEvent);
 
-		});
+            });
+        }
 
         //Finds the image elements in the element passed as argument, or one of its descendants.
         //Always returns an array
-        function __getImgElts(root){
+        function __getImgElts(root) {
             //If the element is already an image, return it
             if (root.tagName == "IMG") return [root];
             //If it's not an image, find the first image in its descendants
@@ -227,16 +157,16 @@ jQuery.fn.extend({
                     return true;
 
                 //If it's an image or contains one, check if it's already in its natural size
-				var nW = imgElt.naturalWidth || 0,
-					nH = imgElt.naturalHeight || 0,
-					w = $(imgElt).outerWidth(),
+                var nW = imgElt.naturalWidth || 0,
+                    nH = imgElt.naturalHeight || 0,
+                    w = $(imgElt).outerWidth(),
                     h = $(imgElt).outerHeight();
-				return (nW > w || nH > h);
-			}
-			else {
+                return (nW > w || nH > h);
+            }
+            else {
                 //If it doesn't have a data-big attribute or is not smaller thant it's natural dimensions, can't zoom it
-				return false;
-			}
+                return false;
+            }
         }
 
         //The next function encapsulates the whole logic of getting the pointer position in every case
@@ -260,13 +190,13 @@ jQuery.fn.extend({
             return __getPointerPos(event, 'pageY');
         }
 
-		function panInit(event) {
+        function panInit(event) {
             event.preventDefault();
-			var panImg = $(".panWrapper img.i");
-			var panWrapper = $(".panWrapper");
+            var panImg = $(".panWrapper img.i");
+            var panWrapper = $(".panWrapper");
 
-			var w = parseInt(panImg.css("width"));  //Image width
-			var h = parseInt(panImg.css("height")); //Image height
+            var w = parseInt(panImg.css("width"));  //Image width
+            var h = parseInt(panImg.css("height")); //Image height
             var vpW = $(panWrapper).width();   //Viewport width
             var vpH = $(panWrapper).height();   //Viewport height
 
@@ -274,13 +204,13 @@ jQuery.fn.extend({
             var angle = parseInt((panImg.data('rotAngle'))) || 0;
             var rotated = angle % 180 != 0;
             if (rotated) {
-                w = [h, h=w][0];    //for old browsers that don't support destructuration
+                w = [h, h = w][0];    //for old browsers that don't support destructuration
             }
 
             /*Margin on the left (difference between the width of the container and the image width).
             If the image is wider than the container, it's negative (the image goes outside the viewport),
             if the image is less wide than the container, it's positive (it's the ammount of margin on the left to center the image) */
-			var ml = -(w - vpW);
+            var ml = -(w - vpW);
             //Idem with the height
             var mt = -(h - vpH);
             //The amount of scroll from the top in the current page, to correct for pointer position
@@ -288,18 +218,18 @@ jQuery.fn.extend({
                 scrollVOffset = window.pageYOffset || document.documentElement.scrollTop;
 
             //Left position of the pointer in page (first, try mouse, then try jQuery touch, default case native event touch for old jQuery versions), and in Viewport (substracting the scroll from left)
-            var posOfPointerInPageX     = __getPointerPosX(event),
-                posOfPointerInViewportX =  posOfPointerInPageX - scrollHOffset,
+            var posOfPointerInPageX = __getPointerPosX(event),
+                posOfPointerInViewportX = posOfPointerInPageX - scrollHOffset,
                 vpW = $(panWrapper).width();   //Viewport width
-            if (posOfPointerInViewportX < 0 ) posOfPointerInViewportX = 0; //In touch devices this can be slightly outside the viewport boundaries
-            if (posOfPointerInViewportX > vpW ) posOfPointerInViewportX = vpW;
+            if (posOfPointerInViewportX < 0) posOfPointerInViewportX = 0; //In touch devices this can be slightly outside the viewport boundaries
+            if (posOfPointerInViewportX > vpW) posOfPointerInViewportX = vpW;
 
             //Top position of the pointer in page (first, try mouse, then try jQuery touch, default case native event touch for old jQuery versions), and in Viewport (substracting the scroll from top)
-            var posOfPointerInPageY     = __getPointerPosY(event),
-                posOfPointerInViewportY =  posOfPointerInPageY - scrollVOffset,
+            var posOfPointerInPageY = __getPointerPosY(event),
+                posOfPointerInViewportY = posOfPointerInPageY - scrollVOffset,
                 vpH = $(panWrapper).height();   //Viewport height
-            if (posOfPointerInViewportY < 0 ) posOfPointerInViewportY = 0; //In touch devices this can be slightly outside the viewport boundaries
-            if (posOfPointerInViewportY > vpH ) posOfPointerInViewportY = vpH;
+            if (posOfPointerInViewportY < 0) posOfPointerInViewportY = 0; //In touch devices this can be slightly outside the viewport boundaries
+            if (posOfPointerInViewportY > vpH) posOfPointerInViewportY = vpH;
 
             //New left: the new amount we need to move from the left to show other parts of the image depending on the current mouse position
             var nl = Math.floor((ml * posOfPointerInViewportX) / vpW);
@@ -307,23 +237,23 @@ jQuery.fn.extend({
             //New top: the new amount we need to move from the top to show other parts of the image depending on the current mouse position
             var nt = Math.floor(mt * posOfPointerInViewportY / vpH);
 
-            var leftWhenCentered =  (vpW - w) / 2;
-            var topWhencentered =  (vpH - h) / 2;
+            var leftWhenCentered = (vpW - w) / 2;
+            var topWhencentered = (vpH - h) / 2;
 
-			if (vpW > w && vpH > h) {   //If the image is smaller than the available viewport, center it in both directions
-				nl = leftWhenCentered;
-				nt = topWhencentered;
-			}
-			else if (vpW > w) { //If the image width is less than the viewport, center it horizontally
-				nl = leftWhenCentered;
-			}
-			else if (vpH > h) { //If the image height is less than the viewport height, center it vertically
-				nt = topWhencentered;
-			}
+            if (vpW > w && vpH > h) {   //If the image is smaller than the available viewport, center it in both directions
+                nl = leftWhenCentered;
+                nt = topWhencentered;
+            }
+            else if (vpW > w) { //If the image width is less than the viewport, center it horizontally
+                nl = leftWhenCentered;
+            }
+            else if (vpH > h) { //If the image height is less than the viewport height, center it vertically
+                nt = topWhencentered;
+            }
 
             //Position image in viewport as calculated
-            var tX = 0, tY=0;
-            switch(angle % 360) {
+            var tX = 0, tY = 0;
+            switch (angle % 360) {
                 case 0:
                     tX = nl;
                     tY = nt;
@@ -331,16 +261,16 @@ jQuery.fn.extend({
                 case 90:
                 case -270:
                     tX = nt;
-                    tY = -(w+nl);
+                    tY = -(w + nl);
                     break;
                 case 180:
                 case -180:
-                    tX = -(w+nl)
-                    tY = -(h+nt);
+                    tX = -(w + nl)
+                    tY = -(h + nt);
                     break;
                 case 270:
                 case -90:
-                    tX = -h-nt;
+                    tX = -h - nt;
                     tY = nl;
                     break;
             }
@@ -348,74 +278,154 @@ jQuery.fn.extend({
 
         }
 
-        return finalSet;
-	}
+        if (addImage) {
+            //Remove from set those elements that don't contain images smaller than their natural size (they don't need zoom at all)
+            //or elements that don't have a data-big attribute (they don't have a big image to zoom to)
+            var finalSet = $(this).filter(function () {
+                if ($(this).attr('data-big'))
+                    return true;
+
+                //Get all the images inside the element to check for zoom needed
+                var imgElts = __getImgElts(this);
+                //Check each image to see if it needs zoom
+                if (imgElts.length > 0) {
+                    for (var i = 0; i < imgElts.length; i++) {
+                        //if any of them needs zoom, include the element in the final set
+                        if (__imgNeedsZoom(imgElts[i])) {
+                            return true;
+                        }
+                    }
+                    //If no image needs zoom, don't include the element in the final set
+                    return false;
+                }
+                else {
+                    return false;
+                }
+            });
+
+            finalSet.css('cursor', 'zoom-in');
+
+            finalSet.on('click', function (e) {
+                var t = $(this);
+                /*
+                Check the data-big attribute of the element.
+                Sometimes the element to initiate the zoom is not an image
+                (maybe it has a background or we just want to use it as a zoom trigger)
+                */
+                var big = t.attr("data-big");
+                //If there's no data-big attribute, use the data-big or src of the image inside the element that fired the event
+                if (big == undefined) {
+                    //Check if the element that fired the event is an image
+                    if (e.target.tagName == "IMG") {
+                        big = e.target.getAttribute('data-big') || e.target.src;
+                    }
+                    else {
+                        //This shouldn't happen, but just in case (don't do anything)
+                        return;
+                    }
+                }
+
+                //See if the current element is a link and has a href attribute
+                var href = t.attr("href");
+                var linkElt = t;
+                //If the element is not a link, find the first parent that is a link
+                if (!href) {
+                    var parents = t.parents("a");
+                    if (parents.length > 0) {
+                        linkElt = $(parents[0]);
+                        href = linkElt.attr("href");
+                    }
+                }
+                //In case it has a link, add the href to the link button (and the specified target, and the title (if available) or the URL)
+                if (href) $(link).attr("href", href).attr("target", linkElt.attr("target")).attr("title", linkElt.attr("title") ? linkElt.attr("title") : href);
+
+                //Show the loader
+                $('#loading').addClass('loading');
+                //Hide the previous image if any
+                var imgViewer = $('.panWrapper img.i').css('display', 'none');
+                $(".panWrapper").show();
+                imgViewer.css("width", "auto").attr("src", big).on('load', function () {
+                    panInit(e);
+                    let target = this;
+                    setTimeout(
+                        function () {
+                            $('#loading').removeClass('loading');
+                            target.style.display = "";
+                        }, 400
+                    );
+                });
+                return false;
+            });
+
+            return finalSet;
+        }
+    }
 });
 
 (function () {
-	var prefix = "", _addEventListener, onwheel, support;
+    var prefix = "", _addEventListener, onwheel, support;
 
-	if (window.addEventListener) {
-		_addEventListener = "addEventListener";
-	} else {
-		_addEventListener = "attachEvent";
-		prefix = "on";
-	}
+    if (window.addEventListener) {
+        _addEventListener = "addEventListener";
+    } else {
+        _addEventListener = "attachEvent";
+        prefix = "on";
+    }
 
-	if (document.onmousewheel !== undefined) {
-		support = "mousewheel";
-	}
-	try {
-		WheelEvent("wheel");
-		support = "wheel";
-	} catch (e) { }
-	if (!support) {
-		support = "DOMMouseScroll";
-	}
+    if (document.onmousewheel !== undefined) {
+        support = "mousewheel";
+    }
+    try {
+        WheelEvent("wheel");
+        support = "wheel";
+    } catch (e) { }
+    if (!support) {
+        support = "DOMMouseScroll";
+    }
 
-	window.addWheelListener = function (elem, callback, useCapture) {
-		_addWheelListener(elem, support, callback, useCapture);
+    window.addWheelListener = function (elem, callback, useCapture) {
+        _addWheelListener(elem, support, callback, useCapture);
 
-		if (support == "DOMMouseScroll") {
-			_addWheelListener(elem, "MozMousePixelScroll", callback, useCapture);
-		}
-	};
+        if (support == "DOMMouseScroll") {
+            _addWheelListener(elem, "MozMousePixelScroll", callback, useCapture);
+        }
+    };
 
-	function _addWheelListener(elem, eventName, callback, useCapture) {
-		elem[_addEventListener](prefix + eventName, support == "wheel" ? callback : function (originalEvent) {
-			!originalEvent && (originalEvent = window.event);
+    function _addWheelListener(elem, eventName, callback, useCapture) {
+        elem[_addEventListener](prefix + eventName, support == "wheel" ? callback : function (originalEvent) {
+            !originalEvent && (originalEvent = window.event);
 
-			var event = {
-				originalEvent: originalEvent,
-				target: originalEvent.target || originalEvent.srcElement,
-				type: "wheel",
-				deltaMode: originalEvent.type == "MozMousePixelScroll" ? 0 : 1,
-				deltaX: 0,
-				delatZ: 0,
-				pageX: originalEvent.pageX,
-				pageY: originalEvent.pageY,
-				preventDefault: function () {
-					originalEvent.preventDefault ?
-						originalEvent.preventDefault() :
-						originalEvent.returnValue = false;
-				}
-			};
+            var event = {
+                originalEvent: originalEvent,
+                target: originalEvent.target || originalEvent.srcElement,
+                type: "wheel",
+                deltaMode: originalEvent.type == "MozMousePixelScroll" ? 0 : 1,
+                deltaX: 0,
+                delatZ: 0,
+                pageX: originalEvent.pageX,
+                pageY: originalEvent.pageY,
+                preventDefault: function () {
+                    originalEvent.preventDefault ?
+                        originalEvent.preventDefault() :
+                        originalEvent.returnValue = false;
+                }
+            };
 
-			if (support == "mousewheel") {
-				event.deltaY = - 1 / 40 * originalEvent.wheelDelta;
-				originalEvent.wheelDeltaX && (event.deltaX = - 1 / 40 * originalEvent.wheelDeltaX);
-			} else {
-				event.deltaY = originalEvent.detail;
-			}
+            if (support == "mousewheel") {
+                event.deltaY = - 1 / 40 * originalEvent.wheelDelta;
+                originalEvent.wheelDeltaX && (event.deltaX = - 1 / 40 * originalEvent.wheelDeltaX);
+            } else {
+                event.deltaY = originalEvent.detail;
+            }
 
-			return callback(event);
+            return callback(event);
 
-		}, useCapture || false);
-	}
+        }, useCapture || false);
+    }
 
-	$.fn.mousewheel = function (handler) {
-		return this.each(function () {
-			window.addWheelListener(this, handler, true);
-		});
-	};
+    $.fn.mousewheel = function (handler) {
+        return this.each(function () {
+            window.addWheelListener(this, handler, true);
+        });
+    };
 })(jQuery);
