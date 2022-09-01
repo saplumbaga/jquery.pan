@@ -98,14 +98,14 @@ Pan capabilities can be applied to newly added images. An example use case is to
 Initialize pan first:
 
 ```javascript
-    $(function(){
-        $().pan(true,true,false);
-        /* Arguments:
-        1. Rotatiom
-        2. Initialize pan
-        3. Add image
-        */
-    })
+$(function(){
+    $().pan(true,true,false);
+    /* Arguments:
+    1. Rotatiom
+    2. Initialize pan
+    3. Add image
+    */
+})
 ```
 Add pan capabilities to new images:
 
