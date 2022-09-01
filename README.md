@@ -107,10 +107,10 @@ $(function(){
     */
 })
 ```
-Add pan capabilities to new images:
+Add pan capabilities to new images on load:
 
 ```javascript
-// img variable is the img element
+// img variable is the image element
 img.onload = function (){
     $(this).pan(false, false, true);
 }
