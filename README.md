@@ -1,6 +1,6 @@
 # Fullscreen Image Zoom and Pan with Jquery
 
->Original 1.x version written by [Samil Hazir](https://github.com/saplumbaga). Later versions written and maintained by [José M. Alarcón](https://github.com/jmalarcon).
+>Original 1.x version written by [Samil Hazir](https://github.com/saplumbaga). Later enhanced versions written and maintained by [José M. Alarcón](https://github.com/jmalarcon).
 
 Fullscreen image zoom, pan and rotation plugin for jQuery with support for links in the images.
 
@@ -12,18 +12,16 @@ Features:
 - Image rotation support with zoom and pan
 - Link button to open links if the image has a wrapping link (in any parent element)
 - Support for mobile devices. You can pan by dragging the zoomed image
-- Support from IE10+ and all modern desktop and mobile browsers
+- Support for all modern desktop and mobile browsers and support for Internet Explorer from version 10
 - Just 2KB minified and gzipped
 
 ## Getting Started
 
-Include jQuery 3.x and the plugin on a page and initialize the plugin. See a working demo at [https://jmalarcon.github.io/jquery.pan/](https://jmalarcon.github.io/jquery.pan/) or check the `index.html` page of this repository. You can also use it as a dependency with `npm` by simply writing:
+Include jQuery 3.x and the plugin on a page and initialize the plugin, best after the page has fully loaded. See a working demo at [https://jmalarcon.github.io/jquery.pan/](https://jmalarcon.github.io/jquery.pan/) or check the `index.html` page of this repository. You can also use it as a dependency with `npm` by simply writing:
 
-```
+```bash
 npm i jquery.pan
 ```
-
->Works with jQuery 3.0+.
 
 You must include a small CSS, `jquery.pan.css` that is in the `dist/css` folder too (536 bytes gzipped).
 
@@ -56,7 +54,12 @@ If a container element is selected to be zoomed, if it contains more than one im
 
 ### Disable image rotation
 
-The `pan()` method takes an optional boolean parameter to indicate if the rotation of images should be allowed or not.
+The `pan()` method takes an optional object with options to use for the page. They can only be specified in the first call to the plugin. They will be ignored in further calls so that the behavior of the plugin would be the same in all the images in the same page.
+
+The available properties for this object in this version are:
+
+- **`showRotationControls`**: parameter to indicate if the rotation of images should be allowed or not.
+- **`minLoadingTime`**: indicates the minimum amount of time in milliseconds that the loading animation should be shown (by default it shows the images immediately as soon as they are loaded)
 
 By default it shows the rotation controls:
 
@@ -64,10 +67,14 @@ By default it shows the rotation controls:
 $(".gallery img").pan();    //Rotation controls are shown and enabled
 ```
 
-If you call it with a `false` parameter, then the rotation controls will not be shown.
+If you call it with a `false` value for the `showRotationControls` option, then the rotation controls will not be shown:
 
 ```js
-$(".gallery img").pan(false);    //No rotation controls
+ var options = {
+        showRotationControls : false,    //The rotation controls shouldn't be shown
+        minLoadingTime: 400 //The minimum amount of time in ms the loading animation should be shown (by default it shows the images immediately)
+    };
+$(".gallery img").pan(options);    //No rotation controls, and images take at least 400ms to be shown
 ```
 
 This is useful, for example in blogs or other environments where the images are manually added or reviewed and where images always have the right orientation. In those cases, disabling the rotation controls is a better option.
@@ -80,7 +87,7 @@ The link button in the viewer will use the same `target` attribute as the origin
 
 The link button in the viewer will use the `title` attribute of the link to show a tooltip.
 
-### Returning value
+### Returning value and call chaining
 
 This `pan()` method filters out the jQuery selection and returns a new jQuery selection with the final elements that have been processed to have zoom & pan capabilities. You can further process them as usual with jQuery, for example:
 
@@ -91,28 +98,17 @@ $(function(){
     });
 })
 ```
+
 ### Dynamically add new images
 
-Pan capabilities can be applied to newly added images. An example use case is to display user selected image files. 
+Pan capabilities can be applied to newly added images. An example use case is to display user selected image files.
 
-Initialize pan first:
-
-```javascript
-$(function(){
-    $().pan(true,true,false);
-    /* Arguments:
-    1. Rotatiom
-    2. Initialize pan
-    3. Add image
-    */
-})
-```
-Add pan capabilities to new images on load:
+Just call `pan` on the new images:
 
 ```javascript
 // img variable is the image element
 img.onload = function (){
-    $(this).pan(false, false, true);
+    $(this).pan();
 }
 ```
 
