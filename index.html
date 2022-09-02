@@ -40,18 +40,41 @@
     <img src="img/big6.jpg" style="max-width: 150px;"/>
 </a>
 
-<h3>This last one is a single image, with its size limited by CSS:</h3>
+<h3>This one is a single image, with its size limited by CSS:</h3>
 <img class="pan" src="img/big6.jpg" style="max-width: 150px;"/>
+
+<div id="dynImg">
+    <h3>This image is dynamically loaded by JavaScript code <strong>after</strong> the zoom/pan has been already applied to the images included in the document:</h3>
+</div>
 
 <p>All images from <a href="http://www.freeimages.com/" target="_blank">freeimages.com</a></p>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 <script src="src/js/jquery.pan.js"></script>
 <script type="text/javascript">
 
+    var options = {
+                    showRotationControls : false,    //If the rotation controls should be shown
+                    minLoadingTime: 400 //The minimum amount of time in ms the loading animation should be shown (by default it shows the images immediately)
+                };
+
     $(window).on('load', function() {
-		$(".pan").pan();
+		$(".pan").pan(options).each(function() {
+            $(this).attr('title', 'CLICK TO ZOOM');
+        });
+
+        //Test for dynamically add a new image and apply the zoom/pan to it
+        var nImg = document.createElement("img");
+        nImg.onload = function(){
+            console.log("Image loaded");
+            $(this).pan();
+        };
+
+        nImg.setAttribute("width", "150");
+        nImg.src = "img/big3.jpg";
+        document.getElementById("dynImg").appendChild(nImg);
     });
+
 </script>
 
 </body>
