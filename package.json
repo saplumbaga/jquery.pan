@@ -1,6 +1,6 @@
 {
   "name": "jquery.pan",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Fullscreen Image Zoom, Pan and Rotate plugin for Jquery, with mobile capabilities",
   "main": "dist/jquery.pan.min.js",
   "scripts": {
@@ -33,15 +33,15 @@
   },
   "homepage": "https://github.com/jmalarcon/jquery.pan#readme",
   "devDependencies": {
-    "cpy-cli": "^4.2.0",
+    "cpy-cli": "^5.0.0",
     "cross-var": "^1.1.0",
     "onchange": "^7.1.0",
-    "replace": "^1.2.1",
-    "rimraf": "^3.0.2",
-    "uglify-js": "^3.17.0",
+    "replace": "^1.2.2",
+    "rimraf": "^5.0.5",
+    "uglify-js": "^3.17.4",
     "uglifycss": "0.0.29"
   },
   "dependencies": {
-    "jquery": "^3.6.1"
+    "jquery": "^3.7.1"
   }
 }

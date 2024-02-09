@@ -365,21 +365,24 @@ https://github.com/jmalarcon/jquery.pan
                     var imgViewer = $('.panWrapper img.i').css('display', 'none').attr('src', '');
                     $(".panWrapper").show();
                     imgViewer.css("width", "auto").attr("src", big).on('load', function () {
-                        // var target = this;
+                        var target = this;
+                        var showImage = function () {
+                            $('#loading').removeClass('loading');
+                            target.style.display = "";
+                        };
+
                         if (pageOptions.minLoadingTime > 0) {
-                            var target = this;
                             panInit(e);
                             setTimeout(
                                     function () {
-                                        $('#loading').removeClass('loading');
-                                        target.style.display = "";
+                                        showImage();
                                     }, pageOptions.minLoadingTime
                                 );
                             }
                             else {
                                 panInit(e);
-                                $('#loading').removeClass('loading');
-                        }
+                               showImage();
+                            }
                     });
                     return false;
                 });
