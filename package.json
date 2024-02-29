@@ -1,6 +1,6 @@
 {
   "name": "jquery.pan",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Fullscreen Image Zoom, Pan and Rotate plugin for Jquery, with mobile capabilities",
   "main": "dist/jquery.pan.min.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "compresscss": "uglifycss ./src/css/jquery.pan.css --output ./dist/css/jquery.pan.css",
     "postcompresscss": "cpy ./src/css/img/* ./dist/css/img --flat",
     "watch": "onchange ./src/**/*.* -- npm run build",
-    "prebuild": "rimraf ./dist/**/*.*",
+    "prebuild": "rimraf --glob ./dist/**/*.*",
     "build": "npm run compressjs && npm run compresscss"
   },
   "repository": {

@@ -114,5 +114,5 @@ img.onload = function (){
 
 ## License
 
-Copyright (c) 2016 Samil Hazir, 2018-2022 José M. Alarcon
+Copyright (c) 2016 Samil Hazir, 2018-2024 José M. Alarcon
 Dual licensed under the GPL and MIT licenses.
